@@ -9,7 +9,7 @@ Site de portfólio pessoal desenvolvido com **HTML, CSS e JavaScript puro**, apr
 ##  Preview
 
 > <img width="1251" height="588" alt="{54CDCA9F-AE65-4623-8A88-352399A57345}" src="https://github.com/user-attachments/assets/ca4c6f5d-32b3-4f65-bb04-1474a88fdd08" />
-*Adicione aqui um print ou GIF do site — arraste a imagem direto no editor do GitHub*
+
 
 ---
 
