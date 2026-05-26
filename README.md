@@ -2,7 +2,7 @@
 
 Site de portfólio pessoal desenvolvido com **HTML, CSS e JavaScript puro**, apresentando minha trajetória como dev front-end, projetos reais publicados e formas de contato.
 
- **[Ver site ao vivo](https://LuisGuilherme605.github.io/portfolio-luis-guilherme)**
+ **[Ver site ao vivo]( https://luisguilherme605.github.io/portfolio-luis-guilherme/)**
 
 ---
 
