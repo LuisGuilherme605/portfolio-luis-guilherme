@@ -59,7 +59,7 @@ portfolio-luis-guilherme/
 └── assets/           # Imagens e outros arquivos
 ```
 
-> *Ajuste a estrutura acima conforme os arquivos reais do seu projeto.*
+
 
 ---
 
