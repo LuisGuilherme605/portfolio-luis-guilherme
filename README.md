@@ -1,19 +1,19 @@
-# 🗂️ Portfólio — Luis Guilherme
+#  Portfólio — Luis Guilherme
 
 Site de portfólio pessoal desenvolvido com **HTML, CSS e JavaScript puro**, apresentando minha trajetória como dev front-end, projetos reais publicados e formas de contato.
 
-🔗 **[Ver site ao vivo](https://LuisGuilherme605.github.io/portfolio-luis-guilherme)**
+ **[Ver site ao vivo](https://LuisGuilherme605.github.io/portfolio-luis-guilherme)**
 
 ---
 
-## 📸 Preview
+##  Preview
 
 > <img width="1251" height="588" alt="{54CDCA9F-AE65-4623-8A88-352399A57345}" src="https://github.com/user-attachments/assets/ca4c6f5d-32b3-4f65-bb04-1474a88fdd08" />
 *Adicione aqui um print ou GIF do site — arraste a imagem direto no editor do GitHub*
 
 ---
 
-## ✨ Funcionalidades
+##  Funcionalidades
 
 - Apresentação pessoal e trajetória como desenvolvedor
 - Seção de projetos com links para os repositórios
@@ -23,7 +23,7 @@ Site de portfólio pessoal desenvolvido com **HTML, CSS e JavaScript puro**, apr
 
 ---
 
-## 🛠️ Tecnologias utilizadas
+##  Tecnologias utilizadas
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
@@ -31,7 +31,7 @@ Site de portfólio pessoal desenvolvido com **HTML, CSS e JavaScript puro**, apr
 
 ---
 
-## 🚀 Como rodar localmente
+##  Como rodar localmente
 
 ```bash
 # Clone o repositório
@@ -48,7 +48,7 @@ Ou use a extensão **Live Server** no VS Code para ver com atualização automá
 
 ---
 
-## 📁 Estrutura do projeto
+##  Estrutura do projeto
 
 ```
 portfolio-luis-guilherme/
@@ -63,13 +63,13 @@ portfolio-luis-guilherme/
 
 ---
 
-## 📬 Contato
+##  Contato
 
 Tem interesse em trabalhar comigo ou só quer trocar uma ideia?
 
-- 💼 [LinkedIn](https://linkedin.com/in/seu-perfil)
-- 📧 seuemail@exemplo.com
-- 🌐 [Portfolio](https://LuisGuilherme605.github.io/portfolio-luis-guilherme)
+-  [LinkedIn](www.linkedin.com/in/luis-guilherme-126072360)
+-  lg5104891@gmail.com
+-  [Portfolio](https://LuisGuilherme605.github.io/portfolio-luis-guilherme)
 
 ---
 
