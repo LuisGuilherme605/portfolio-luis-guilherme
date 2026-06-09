@@ -1,29 +1,34 @@
-#  Portfólio — Luis Guilherme
+# Portfolio — Luis Guilherme
 
-Site de portfólio pessoal desenvolvido com **HTML, CSS e JavaScript puro**, apresentando minha trajetória como dev front-end, projetos reais publicados e formas de contato.
+Site de portfolio pessoal desenvolvido com **HTML, CSS e JavaScript puro**, apresentando minha trajetoria como dev front-end, projetos reais publicados e formas de contato.
 
- **[Ver site ao vivo]( https://luisguilherme605.github.io/portfolio-luis-guilherme/)**
-
----
-
-##  Preview
-
-> <img width="1251" height="588" alt="{54CDCA9F-AE65-4623-8A88-352399A57345}" src="https://github.com/user-attachments/assets/ca4c6f5d-32b3-4f65-bb04-1474a88fdd08" />
-
+**[Ver site ao vivo](https://luisguilherme605.github.io/portfolio-luis-guilherme/)**
 
 ---
 
-##  Funcionalidades
+## Preview
 
-- Apresentação pessoal e trajetória como desenvolvedor
-- Seção de projetos com links para os repositórios
-- Formulário / seção de contato
-- Layout responsivo para mobile e desktop
-- Desenvolvido 100% com tecnologias nativas (sem frameworks)
+> <img width="1251" height="588" alt="Preview do portfolio" src="https://github.com/user-attachments/assets/ca4c6f5d-32b3-4f65-bb04-1474a88fdd08" />
 
 ---
 
-##  Tecnologias utilizadas
+## Funcionalidades
+
+- Apresentacao pessoal e trajetoria como desenvolvedor
+- Secao de projetos com links para os sites ao vivo
+- Secao de contato com links diretos (email, GitHub, LinkedIn, WhatsApp)
+- Layout 100% responsivo (mobile e desktop)
+- Cursor customizado com efeito de trail
+- Background animado com estrelas (canvas)
+- Animacoes de fade-in com Intersection Observer
+- Marquee de tecnologias
+- Orbita animada de tech stack
+- Menu hamburger para mobile
+- SEO otimizado com Open Graph tags
+
+---
+
+## Tecnologias
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
@@ -31,48 +36,38 @@ Site de portfólio pessoal desenvolvido com **HTML, CSS e JavaScript puro**, apr
 
 ---
 
-##  Como rodar localmente
-
-```bash
-# Clone o repositório
-git clone https://github.com/LuisGuilherme605/portfolio-luis-guilherme.git
-
-# Acesse a pasta
-cd portfolio-luis-guilherme
-
-# Abra o arquivo no navegador
-# Basta abrir o index.html no seu navegador preferido
-```
-
-Ou use a extensão **Live Server** no VS Code para ver com atualização automática.
-
----
-
-##  Estrutura do projeto
+## Estrutura do projeto
 
 ```
 portfolio-luis-guilherme/
-│
-├── index.html        # Página principal
-├── style.css         # Estilos (se separado)
-├── script.js         # Lógica JavaScript (se separado)
-└── assets/           # Imagens e outros arquivos
+├── index.html     # Pagina principal (HTML semantico)
+├── style.css      # Estilos separados e organizados por secao
+├── script.js      # Logica JavaScript modularizada
+├── .gitignore     # Arquivos ignorados pelo Git
+└── README.md      # Documentacao do projeto
 ```
-
-
 
 ---
 
-##  Contato
+## Como rodar localmente
 
-Tem interesse em trabalhar comigo ou só quer trocar uma ideia?
+```bash
+git clone https://github.com/LuisGuilherme605/portfolio-luis-guilherme.git
+cd portfolio-luis-guilherme
+```
 
--  [LinkedIn](www.linkedin.com/in/luis-guilherme-126072360)
--  lg5104891@gmail.com
--  [Portfolio](https://LuisGuilherme605.github.io/portfolio-luis-guilherme)
+Abra `index.html` no navegador ou use a extensao **Live Server** no VS Code.
+
+---
+
+## Contato
+
+- [LinkedIn](https://www.linkedin.com/in/luis-guilherme-126072360)
+- lg5104891@gmail.com
+- [Portfolio](https://luisguilherme605.github.io/portfolio-luis-guilherme)
 
 ---
 
 <div align="center">
-  Feito com 💙 por <a href="https://github.com/LuisGuilherme605">Luis Guilherme</a>
+  Feito por <a href="https://github.com/LuisGuilherme605">Luis Guilherme</a>
 </div>
