@@ -477,3 +477,36 @@ var prefersReducedMotion = window.matchMedia(
     });
   });
 })();
+
+/* Botao voltar ao topo */
+(function () {
+  var btn = document.getElementById("to-top");
+  if (!btn) return;
+
+  var ticking = false;
+  function update() {
+    var y = window.scrollY || document.documentElement.scrollTop;
+    btn.classList.toggle("show", y > 600);
+    ticking = false;
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    },
+    { passive: true }
+  );
+
+  btn.addEventListener("click", function () {
+    window.scrollTo({
+      top: 0,
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
+  });
+
+  update();
+})();
