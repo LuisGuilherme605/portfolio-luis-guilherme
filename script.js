@@ -272,3 +272,68 @@ var prefersReducedMotion = window.matchMedia(
     if (section) observer.observe(section);
   });
 })();
+
+/* Robo 3D que segue o mouse (apenas desktop) */
+(function () {
+  var robot = document.getElementById("robot");
+  if (!robot) return;
+
+  // Sem cursor (toque) ou com movimento reduzido: robo fica parado/escondido
+  if (
+    prefersReducedMotion ||
+    window.matchMedia("(hover: none)").matches ||
+    window.matchMedia("(max-width: 900px)").matches
+  ) {
+    return;
+  }
+
+  var head = robot.querySelector(".robot-head");
+  var center = { x: 0, y: 0 };
+  var mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  var ticking = false;
+
+  function measure() {
+    var rect = head.getBoundingClientRect();
+    center.x = rect.left + rect.width / 2;
+    center.y = rect.top + rect.height / 2;
+  }
+
+  function clamp(v, min, max) {
+    return Math.max(min, Math.min(max, v));
+  }
+
+  function render() {
+    var dx = mouse.x - center.x;
+    var dy = mouse.y - center.y;
+
+    var ry = clamp(dx / 14, -32, 32); // gira a cabeca na horizontal
+    var rx = clamp(-dy / 16, -22, 22); // inclina na vertical
+    var px = clamp(dx / 45, -4, 4); // pupila X
+    var py = clamp(dy / 45, -4, 4); // pupila Y
+
+    robot.style.setProperty("--ry", ry + "deg");
+    robot.style.setProperty("--rx", rx + "deg");
+    robot.style.setProperty("--px", px + "px");
+    robot.style.setProperty("--py", py + "px");
+
+    ticking = false;
+  }
+
+  window.addEventListener(
+    "mousemove",
+    function (e) {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      if (!ticking) {
+        window.requestAnimationFrame(render);
+        ticking = true;
+      }
+    },
+    { passive: true }
+  );
+
+  window.addEventListener("resize", measure);
+  window.addEventListener("scroll", measure, { passive: true });
+
+  measure();
+})();
