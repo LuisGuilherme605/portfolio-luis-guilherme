@@ -35,7 +35,67 @@ body {
   color: var(--text);
   overflow-x: hidden;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Cursor customizado so esconde o nativo quando o JS o ativa */
+body.has-custom-cursor {
   cursor: none;
+}
+
+/* Selecao de texto */
+::selection {
+  background: rgba(124, 92, 252, 0.35);
+  color: #fff;
+}
+
+/* Ancoras nao ficam escondidas atras do nav fixo */
+section[id] {
+  scroll-margin-top: 6rem;
+}
+
+/* Foco acessivel via teclado */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Skip link */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  z-index: 10000;
+  padding: 0.7rem 1.2rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.25s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Barra de progresso de scroll */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  z-index: 10001;
+  pointer-events: none;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 12px rgba(124, 92, 252, 0.6);
 }
 
 /* ========================================
@@ -90,9 +150,19 @@ nav {
   gap: 2.5rem;
   padding: 0.75rem 2rem;
   background: rgba(14, 14, 26, 0.75);
+  -webkit-backdrop-filter: blur(24px);
   backdrop-filter: blur(24px);
   border: 1px solid var(--border);
   border-radius: 50px;
+  transition: padding 0.35s ease, background 0.35s ease,
+    box-shadow 0.35s ease, top 0.35s ease;
+}
+
+nav.scrolled {
+  top: 0.7rem;
+  padding: 0.55rem 1.7rem;
+  background: rgba(10, 10, 18, 0.9);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
 }
 
 .nav-logo {
@@ -110,6 +180,7 @@ nav {
 }
 
 .nav-links a {
+  position: relative;
   font-size: 0.78rem;
   color: var(--muted);
   text-decoration: none;
@@ -118,8 +189,30 @@ nav {
   transition: color 0.2s;
 }
 
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .nav-links a:hover {
   color: var(--text);
+}
+
+.nav-links a.active {
+  color: var(--text);
+}
+
+.nav-links a.active::after,
+.nav-links a:hover::after {
+  transform: scaleX(1);
 }
 
 /* ========================================
@@ -177,6 +270,43 @@ nav {
     linear-gradient(90deg, rgba(124, 92, 252, 0.04) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 90% 70% at 60% 40%, black, transparent);
+}
+
+/* Entrada escalonada do hero */
+.hero-eyebrow,
+.hero-name,
+.hero-role,
+.hero-desc,
+.hero-ctas {
+  opacity: 0;
+  animation: heroIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-eyebrow {
+  animation-delay: 0.1s;
+}
+.hero-name {
+  animation-delay: 0.22s;
+}
+.hero-role {
+  animation-delay: 0.36s;
+}
+.hero-desc {
+  animation-delay: 0.48s;
+}
+.hero-ctas {
+  animation-delay: 0.6s;
+}
+
+@keyframes heroIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .hero-eyebrow {
@@ -1335,5 +1465,97 @@ footer {
 
   .projects-grid {
     grid-template-columns: 1fr;
+  }
+
+  .scroll-hint {
+    display: none;
+  }
+
+  .hero-orb-1 {
+    width: 320px;
+    height: 320px;
+  }
+
+  .hero-orb-2 {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+/* Celulares pequenos */
+@media (max-width: 480px) {
+  .hero {
+    padding: 7rem 1.25rem 4rem;
+  }
+
+  section.content,
+  .stack-section {
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  h1.hero-name {
+    line-height: 1;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+  }
+
+  .hero-ctas {
+    width: 100%;
+  }
+
+  .hero-ctas .btn-glow,
+  .hero-ctas .btn-ghost {
+    flex: 1;
+    text-align: center;
+    padding: 0.95rem 1rem;
+  }
+
+  .stat-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .marquee-item {
+    padding: 0 1.75rem;
+  }
+
+  .c-link {
+    padding: 0.95rem 1rem;
+    font-size: 0.85rem;
+    word-break: break-word;
+  }
+
+  nav {
+    gap: 1rem;
+    padding: 0.55rem 1rem;
+  }
+}
+
+/* Respeita preferencia por menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .fi {
+    opacity: 1;
+    transform: none;
+  }
+
+  .marquee-track,
+  .orbit-ring,
+  .hero-orb,
+  .pulse-dot,
+  .scroll-hint::after {
+    animation: none !important;
   }
 }
