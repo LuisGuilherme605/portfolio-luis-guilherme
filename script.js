@@ -510,3 +510,225 @@ var prefersReducedMotion = window.matchMedia(
 
   update();
 })();
+
+/* Loading screen */
+(function () {
+  var loader = document.getElementById("loader");
+  if (!loader) return;
+
+  function hide() {
+    loader.classList.add("done");
+  }
+
+  if (prefersReducedMotion) {
+    hide();
+    return;
+  }
+
+  var hidden = false;
+  function hideOnce() {
+    if (hidden) return;
+    hidden = true;
+    hide();
+  }
+
+  window.addEventListener("load", function () {
+    setTimeout(hideOnce, 600);
+  });
+  // Seguranca: nunca deixa o loader preso
+  setTimeout(hideOnce, 3000);
+})();
+
+/* Tema claro/escuro */
+(function () {
+  var toggle = document.getElementById("themeToggle");
+  var meta = document.querySelector('meta[name="theme-color"]');
+  var COLORS = { dark: "#07070f", light: "#f4f3fb" };
+
+  function apply(theme) {
+    var light = theme === "light";
+    document.body.classList.toggle("light", light);
+    if (meta) meta.setAttribute("content", light ? COLORS.light : COLORS.dark);
+    if (toggle) toggle.setAttribute("aria-pressed", String(light));
+  }
+
+  var saved = null;
+  try {
+    saved = localStorage.getItem("theme");
+  } catch (e) {}
+
+  if (saved) {
+    apply(saved);
+  } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+    apply("light");
+  }
+
+  function toggleTheme() {
+    var light = !document.body.classList.contains("light");
+    apply(light ? "light" : "dark");
+    try {
+      localStorage.setItem("theme", light ? "light" : "dark");
+    } catch (e) {}
+  }
+
+  if (toggle) toggle.addEventListener("click", toggleTheme);
+
+  // Exposto para o command palette
+  window.__toggleTheme = toggleTheme;
+})();
+
+/* Registro do Service Worker (PWA) */
+(function () {
+  if (!("serviceWorker" in navigator)) return;
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("service-worker.js").catch(function () {});
+  });
+})();
+
+/* Command Palette (⌘K / Ctrl+K) */
+(function () {
+  var cmdk = document.getElementById("cmdk");
+  if (!cmdk) return;
+
+  var input = cmdk.querySelector(".cmdk-input");
+  var list = cmdk.querySelector(".cmdk-list");
+  var empty = cmdk.querySelector(".cmdk-empty");
+  var trigger = document.getElementById("cmdkTrigger");
+
+  var commands = [
+    { icon: "◆", label: "Sobre mim", hint: "Seção", type: "nav", value: "#sobre" },
+    { icon: "✦", label: "Habilidades", hint: "Seção", type: "nav", value: "#habilidades" },
+    { icon: "⬡", label: "Stack tecnológico", hint: "Seção", type: "nav", value: "#stack" },
+    { icon: "▣", label: "Projetos", hint: "Seção", type: "nav", value: "#projetos" },
+    { icon: "✎", label: "Formação", hint: "Seção", type: "nav", value: "#formacao" },
+    { icon: "✉", label: "Contato", hint: "Seção", type: "nav", value: "#contato" },
+    { icon: "☀", label: "Alternar tema claro/escuro", hint: "Ação", type: "action", value: "theme" },
+    { icon: "▲", label: "Ir para o topo", hint: "Ação", type: "action", value: "top" },
+    { icon: "✆", label: "Conversar no WhatsApp", hint: "Link", type: "link", value: "https://wa.me/5561998730501" },
+    { icon: "@", label: "Enviar e-mail", hint: "Link", type: "link", value: "mailto:Lg5104891@gmail.com" },
+    { icon: "⌥", label: "GitHub", hint: "Link", type: "link", value: "https://github.com/LuisGuilherme605" },
+    { icon: "in", label: "LinkedIn", hint: "Link", type: "link", value: "https://www.linkedin.com/in/luis-guilherme-126072360" },
+  ];
+
+  var filtered = commands.slice();
+  var activeIndex = 0;
+
+  function norm(s) {
+    return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  }
+
+  function render() {
+    list.innerHTML = "";
+    if (!filtered.length) {
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+    filtered.forEach(function (cmd, i) {
+      var li = document.createElement("li");
+      li.className = "cmdk-item" + (i === activeIndex ? " active" : "");
+      li.setAttribute("role", "option");
+      li.innerHTML =
+        '<span class="cmdk-ico">' + cmd.icon + "</span>" +
+        "<span>" + cmd.label + "</span>" +
+        '<span class="cmdk-hint">' + cmd.hint + "</span>";
+      li.addEventListener("click", function () {
+        run(cmd);
+      });
+      li.addEventListener("mousemove", function () {
+        activeIndex = i;
+        updateActive();
+      });
+      list.appendChild(li);
+    });
+  }
+
+  function updateActive() {
+    var items = list.querySelectorAll(".cmdk-item");
+    items.forEach(function (el, i) {
+      el.classList.toggle("active", i === activeIndex);
+    });
+  }
+
+  function filter() {
+    var q = norm(input.value.trim());
+    filtered = q
+      ? commands.filter(function (c) {
+          return norm(c.label).indexOf(q) !== -1 || norm(c.hint).indexOf(q) !== -1;
+        })
+      : commands.slice();
+    activeIndex = 0;
+    render();
+  }
+
+  function open() {
+    filtered = commands.slice();
+    activeIndex = 0;
+    input.value = "";
+    render();
+    cmdk.classList.add("open");
+    cmdk.removeAttribute("hidden");
+    document.body.style.overflow = "hidden";
+    setTimeout(function () {
+      input.focus();
+    }, 30);
+  }
+
+  function close() {
+    cmdk.classList.remove("open");
+    cmdk.setAttribute("hidden", "");
+    document.body.style.overflow = "";
+  }
+
+  function run(cmd) {
+    close();
+    if (cmd.type === "nav") {
+      var target = document.querySelector(cmd.value);
+      if (target) {
+        target.classList.add("vis");
+        setTimeout(function () {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 60);
+      }
+    } else if (cmd.type === "link") {
+      window.open(cmd.value, "_blank", "noopener");
+    } else if (cmd.type === "action") {
+      if (cmd.value === "theme" && window.__toggleTheme) window.__toggleTheme();
+      if (cmd.value === "top")
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+    }
+  }
+
+  input.addEventListener("input", filter);
+
+  cmdk.querySelectorAll("[data-cmdk-close]").forEach(function (el) {
+    el.addEventListener("click", close);
+  });
+
+  if (trigger) trigger.addEventListener("click", open);
+
+  document.addEventListener("keydown", function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      cmdk.classList.contains("open") ? close() : open();
+      return;
+    }
+    if (!cmdk.classList.contains("open")) return;
+
+    if (e.key === "Escape") {
+      e.preventDefault();
+      close();
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      activeIndex = Math.min(activeIndex + 1, filtered.length - 1);
+      updateActive();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      activeIndex = Math.max(activeIndex - 1, 0);
+      updateActive();
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (filtered[activeIndex]) run(filtered[activeIndex]);
+    }
+  });
+})();

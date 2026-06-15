@@ -1945,3 +1945,309 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   .fab-whats::after { animation: none !important; }
 }
+
+/* ========================================
+   LOADING SCREEN
+   ======================================== */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  animation: loaderFallback 0s 3.5s forwards;
+}
+
+#loader.done {
+  animation: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@keyframes loaderFallback {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+.loader-logo {
+  font-family: "Space Mono", monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  animation: loaderPulse 1.4s ease-in-out infinite;
+}
+
+.loader-logo span {
+  background: linear-gradient(130deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes loaderPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.loader-bar {
+  width: 180px;
+  height: 2px;
+  background: rgba(124, 92, 252, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.loader-bar span {
+  display: block;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+  animation: loaderSlide 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes loaderSlide {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(360%); }
+}
+
+/* ========================================
+   BOTOES NAV: tema + command palette
+   ======================================== */
+.nav-cmdk,
+.nav-theme {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(124, 92, 252, 0.08);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.nav-cmdk:hover,
+.nav-theme:hover {
+  color: var(--text);
+  border-color: rgba(124, 92, 252, 0.45);
+  background: rgba(124, 92, 252, 0.14);
+}
+
+.nav-cmdk kbd {
+  font-family: "Space Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+}
+
+.nav-cmdk span {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.nav-theme {
+  padding: 0.4rem;
+}
+
+.nav-theme .icon-moon { display: none; }
+.nav-theme .icon-sun { display: block; }
+body.light .nav-theme .icon-sun { display: none; }
+body.light .nav-theme .icon-moon { display: block; }
+
+/* ========================================
+   COMMAND PALETTE (⌘K)
+   ======================================== */
+.cmdk {
+  position: fixed;
+  inset: 0;
+  z-index: 15000;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 14vh;
+}
+
+.cmdk.open {
+  display: flex;
+}
+
+.cmdk-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 5, 12, 0.6);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: cmdkFade 0.2s ease;
+}
+
+.cmdk-panel {
+  position: relative;
+  width: min(560px, 92vw);
+  background: var(--bg2);
+  border: 1px solid rgba(124, 92, 252, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+  animation: cmdkPop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cmdkFade {
+  from { opacity: 0; }
+}
+
+@keyframes cmdkPop {
+  from { opacity: 0; transform: translateY(-12px) scale(0.98); }
+}
+
+.cmdk-search {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.cmdk-search-icon {
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+.cmdk-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: "Sora", sans-serif;
+  font-size: 0.95rem;
+}
+
+.cmdk-input::placeholder {
+  color: var(--muted);
+}
+
+.cmdk-esc {
+  font-family: "Space Mono", monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.15rem 0.4rem;
+}
+
+.cmdk-list {
+  list-style: none;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.cmdk-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.cmdk-item .cmdk-ico {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(124, 92, 252, 0.12);
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+
+.cmdk-item .cmdk-hint {
+  margin-left: auto;
+  font-family: "Space Mono", monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cmdk-item.active,
+.cmdk-item:hover {
+  background: rgba(124, 92, 252, 0.16);
+}
+
+.cmdk-empty {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* ========================================
+   TEMA CLARO
+   ======================================== */
+body.light {
+  --bg: #f4f3fb;
+  --bg2: #ffffff;
+  --bg3: #e9e8fa;
+  --accent: #6b46e5;
+  --accent2: #0aa98e;
+  --text: #16162b;
+  --muted: #5c5c7e;
+  --border: rgba(107, 70, 229, 0.16);
+  --card: rgba(20, 20, 45, 0.025);
+  --glow: rgba(107, 70, 229, 0.25);
+}
+
+body.light nav {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+body.light nav.scrolled {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 40px rgba(80, 60, 160, 0.12);
+}
+
+body.light .nav-mobile-menu {
+  background: rgba(244, 243, 251, 0.97);
+}
+
+body.light .marquee-section {
+  background: rgba(107, 70, 229, 0.05);
+}
+
+body.light #star-canvas {
+  opacity: 0.4;
+}
+
+body.light .sk-tag {
+  color: #5b3fd1;
+}
+
+body.light .proj-thumb-name {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.light .btn-glow {
+  color: #fff;
+}
+
+/* Esconde ⌘K em telas pequenas (sem teclado fisico) */
+@media (max-width: 900px) {
+  .nav-cmdk { display: none; }
+}

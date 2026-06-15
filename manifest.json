@@ -1,0 +1,20 @@
+{
+  "name": "Luis Guilherme — Dev Frontend & ADS",
+  "short_name": "LG.dev",
+  "description": "Portfolio de Luis Guilherme Vitorino Roberto — Desenvolvedor Front-End e estudante de ADS.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#07070f",
+  "theme_color": "#07070f",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
