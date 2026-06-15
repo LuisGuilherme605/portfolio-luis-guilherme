@@ -337,3 +337,143 @@ var prefersReducedMotion = window.matchMedia(
 
   measure();
 })();
+
+/* Contador animado nas estatisticas */
+(function () {
+  var nums = document.querySelectorAll("[data-count]");
+  if (!nums.length) return;
+
+  function animate(el) {
+    var target = parseInt(el.getAttribute("data-count"), 10);
+    if (isNaN(target)) return;
+
+    if (prefersReducedMotion) {
+      el.textContent = String(target);
+      return;
+    }
+
+    var duration = 1200;
+    var start = null;
+
+    function step(ts) {
+      if (!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      el.textContent = String(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    nums.forEach(animate);
+    return;
+  }
+
+  var observer = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          animate(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  nums.forEach(function (el) {
+    observer.observe(el);
+  });
+})();
+
+/* Efeito de digitacao no hero */
+(function () {
+  var el = document.getElementById("typed-text");
+  if (!el) return;
+
+  var words = (el.getAttribute("data-words") || "").split("|").filter(Boolean);
+  if (words.length < 2 || prefersReducedMotion) return;
+
+  var wordIndex = 0;
+  var charIndex = words[0].length; // comeca com a primeira palavra completa
+  var deleting = false;
+
+  function tick() {
+    var current = words[wordIndex];
+
+    if (!deleting) {
+      charIndex++;
+      el.textContent = current.slice(0, charIndex);
+      if (charIndex >= current.length) {
+        deleting = true;
+        return setTimeout(tick, 1600); // pausa com a palavra completa
+      }
+    } else {
+      charIndex--;
+      el.textContent = current.slice(0, charIndex);
+      if (charIndex <= 0) {
+        deleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+      }
+    }
+    setTimeout(tick, deleting ? 45 : 85);
+  }
+
+  setTimeout(tick, 1600);
+})();
+
+/* Tilt 3D + spotlight nos cards (desktop) */
+(function () {
+  if (prefersReducedMotion || window.matchMedia("(hover: none)").matches) return;
+
+  var cards = document.querySelectorAll(".skill-card, .proj-card");
+  var MAX = 7; // graus
+
+  cards.forEach(function (card) {
+    var spot = document.createElement("span");
+    spot.className = "card-spot";
+    spot.setAttribute("aria-hidden", "true");
+    card.insertBefore(spot, card.firstChild);
+
+    card.addEventListener("mousemove", function (e) {
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      var ry = ((x - rect.width / 2) / (rect.width / 2)) * MAX;
+      var rx = -((y - rect.height / 2) / (rect.height / 2)) * MAX;
+
+      card.classList.add("is-tilting");
+      card.style.transform =
+        "perspective(700px) rotateX(" + rx + "deg) rotateY(" + ry +
+        "deg) translateY(-6px)";
+      spot.style.setProperty("--mx", x + "px");
+      spot.style.setProperty("--my", y + "px");
+    });
+
+    card.addEventListener("mouseleave", function () {
+      card.classList.remove("is-tilting");
+      card.style.transform = "";
+    });
+  });
+})();
+
+/* Botoes magneticos (desktop) */
+(function () {
+  if (prefersReducedMotion || window.matchMedia("(hover: none)").matches) return;
+
+  var STRENGTH = 0.35;
+  document.querySelectorAll(".btn-glow, .btn-ghost").forEach(function (btn) {
+    btn.addEventListener("mousemove", function (e) {
+      var rect = btn.getBoundingClientRect();
+      var mx = e.clientX - rect.left - rect.width / 2;
+      var my = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform =
+        "translate(" + mx * STRENGTH + "px," + (my * STRENGTH - 3) + "px)";
+    });
+
+    btn.addEventListener("mouseleave", function () {
+      btn.style.transform = "";
+    });
+  });
+})();
