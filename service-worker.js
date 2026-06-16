@@ -1,5 +1,5 @@
 /* Service Worker — Portfolio Luis Guilherme */
-var CACHE = "lgdev-v1";
+var CACHE = "lgdev-v2";
 var ASSETS = [
   "./",
   "index.html",
@@ -7,6 +7,7 @@ var ASSETS = [
   "script.js",
   "favicon.svg",
   "manifest.json",
+  "curriculo-luis-guilherme.pdf",
 ];
 
 self.addEventListener("install", function (event) {
