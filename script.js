@@ -12,6 +12,7 @@ var prefersReducedMotion = window.matchMedia(
   if (!canvas || prefersReducedMotion) return;
 
   var ctx = canvas.getContext("2d");
+  if (!ctx) return;
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
   var width = 0;
   var height = 0;
@@ -816,4 +817,149 @@ var prefersReducedMotion = window.matchMedia(
 
   if (toggle) toggle.addEventListener("click", toggleLang);
   window.__toggleLang = toggleLang;
+})();
+
+/* Estudos de caso (modal, bilingue) */
+(function () {
+  var modal = document.getElementById("caseModal");
+  if (!modal) return;
+  var content = modal.querySelector(".case-content");
+
+  var L = {
+    pt: { challenge: "Desafio", solution: "Solução", decisions: "Decisões técnicas", outcome: "Resultado & aprendizados", role: "Papel", tech: "Tecnologias", visit: "Ver ao vivo →", code: "Ver código →" },
+    en: { challenge: "Challenge", solution: "Solution", decisions: "Technical decisions", outcome: "Outcome & learnings", role: "Role", tech: "Tech", visit: "View live →", code: "View code →" },
+  };
+
+  var CASES = {
+    vortex: {
+      tags: ["HTML", "CSS", "JavaScript"],
+      link: { url: "https://zingy-daffodil-2d280f.netlify.app/", type: "visit" },
+      pt: {
+        name: "VORTEX — Arquitetura de Vanguarda",
+        type: "Web Design · Landing Page Institucional",
+        role: "Projeto autoral (solo) — design e desenvolvimento",
+        challenge: "Estúdios de arquitetura premium precisam transmitir sofisticação no primeiro segundo. O desafio era criar uma landing institucional com cara de alto padrão e identidade visual forte, sem usar nenhum framework — apenas HTML, CSS e JavaScript.",
+        solution: "Construí um site escuro e elegante com loading screen animado, hierarquia tipográfica marcante e seções bem definidas: portfólio em destaque, serviços, equipe e formulário de contato. Cada detalhe reforça a sensação de marca premium.",
+        decisions: ["HTML semântico e CSS organizado por seções, sem dependências externas.", "Animações em CSS para transições suaves e loading screen.", "Layout responsivo pensado para mobile e desktop."],
+        outcome: ["Site publicado e no ar (Netlify).", "Identidade visual consistente do topo ao rodapé.", "Aprendi a estruturar um projeto maior em seções reutilizáveis."],
+      },
+      en: {
+        name: "VORTEX — Vanguard Architecture",
+        type: "Web Design · Corporate Landing Page",
+        role: "Solo project — design and development",
+        challenge: "Premium architecture studios must convey sophistication in the first second. The challenge was to build a high-end corporate landing page with a strong visual identity, using no framework — just HTML, CSS and JavaScript.",
+        solution: "I built a dark, elegant site with an animated loading screen, strong typographic hierarchy and well-defined sections: featured portfolio, services, team and contact form. Every detail reinforces a premium brand feel.",
+        decisions: ["Semantic HTML and section-organized CSS, with no external dependencies.", "CSS animations for smooth transitions and the loading screen.", "Responsive layout designed for mobile and desktop."],
+        outcome: ["Site published and live (Netlify).", "Consistent visual identity from top to bottom.", "Learned to structure a larger project into reusable sections."],
+      },
+    },
+    forma: {
+      tags: ["HTML", "CSS", "JavaScript"],
+      link: { url: "https://willowy-lollipop-4ade34.netlify.app/", type: "visit" },
+      pt: {
+        name: "Forma Studio — Design que Transforma",
+        type: "Web Design · Agência Criativa",
+        role: "Projeto autoral (solo) — design e desenvolvimento",
+        challenge: "Uma agência criativa precisa que o próprio site seja a prova do seu trabalho. O desafio era um layout editorial com personalidade, que apresentasse cases e depoimentos de forma envolvente.",
+        solution: "Criei um site com marquee animado, showcase de cases, depoimentos e seção de serviços estruturada, com tipografia refinada e animações suaves que guiam a leitura.",
+        decisions: ["Layout editorial com bastante respiro e hierarquia clara.", "Marquee e microanimações em CSS/JS puro.", "Padrões visuais reaproveitados entre as seções."],
+        outcome: ["Site publicado (Netlify) com identidade clean e profissional.", "Pratiquei ritmo visual e composição editorial.", "Reforcei consistência de componentes em um projeto real."],
+      },
+      en: {
+        name: "Forma Studio — Design that Transforms",
+        type: "Web Design · Creative Agency",
+        role: "Solo project — design and development",
+        challenge: "A creative agency needs its own site to be proof of its work. The challenge was an editorial layout with personality that showcases cases and testimonials in an engaging way.",
+        solution: "I created a site with an animated marquee, case showcase, testimonials and a structured services section, with refined typography and smooth animations that guide the reading.",
+        decisions: ["Editorial layout with generous whitespace and clear hierarchy.", "Marquee and micro-animations in vanilla CSS/JS.", "Visual patterns reused across sections."],
+        outcome: ["Site published (Netlify) with a clean, professional identity.", "Practiced visual rhythm and editorial composition.", "Reinforced component consistency in a real project."],
+      },
+    },
+    brasilia: {
+      tags: ["HTML", "CSS", "JavaScript", "3D"],
+      link: { url: "https://github.com/LuisGuilherme605/Brasilia3D", type: "code" },
+      pt: {
+        name: "Brasília 3D — Guia Turístico Interativo",
+        type: "Web Interativo · Turismo 3D",
+        role: "Projeto autoral (solo) — desenvolvimento",
+        challenge: "Mostrar pontos turísticos de Brasília de um jeito diferente do mapa tradicional. O desafio técnico era criar navegação imersiva em 3D usando apenas tecnologias web nativas.",
+        solution: "Desenvolvi um guia interativo com visualização tridimensional dos principais pontos da capital, navegação imersiva e foco na experiência de exploração.",
+        decisions: ["HTML, CSS e JavaScript puro, sem bibliotecas 3D pesadas.", "Foco em performance e interação fluida.", "Conteúdo turístico organizado por pontos de interesse."],
+        outcome: ["Projeto no GitHub, demonstrando capacidade de encarar um desafio técnico mais complexo.", "Aprendi a lidar com interação espacial e organização de dados.", "Saí da zona de conforto além das landing pages."],
+      },
+      en: {
+        name: "Brasília 3D — Interactive Tourist Guide",
+        type: "Interactive Web · 3D Tourism",
+        role: "Solo project — development",
+        challenge: "Show Brasília's landmarks in a different way from the traditional map. The technical challenge was building immersive 3D navigation using only native web technologies.",
+        solution: "I built an interactive guide with three-dimensional visualization of the capital's main landmarks, immersive navigation and a focus on the exploration experience.",
+        decisions: ["Vanilla HTML, CSS and JavaScript, with no heavy 3D libraries.", "Focus on performance and fluid interaction.", "Tourist content organized by points of interest."],
+        outcome: ["Project on GitHub, showing the ability to tackle a more complex technical challenge.", "Learned to handle spatial interaction and data organization.", "Stepped outside the comfort zone beyond landing pages."],
+      },
+    },
+  };
+
+  var currentId = null;
+
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function render(id) {
+    var c = CASES[id];
+    if (!c) return;
+    var lang = document.documentElement.lang === "en" ? "en" : "pt";
+    var d = c[lang];
+    var t = L[lang];
+
+    var tags = c.tags.map(function (x) { return '<span class="sk-tag">' + esc(x) + "</span>"; }).join("");
+    var dec = d.decisions.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("");
+    var out = d.outcome.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("");
+    var linkLabel = c.link.type === "code" ? t.code : t.visit;
+
+    content.innerHTML =
+      '<div class="case-type">' + esc(d.type) + "</div>" +
+      "<h3 class=\"case-name\">" + esc(d.name) + "</h3>" +
+      '<div class="case-tags">' + tags + "</div>" +
+      '<div class="case-role"><strong>' + t.role + ":</strong> " + esc(d.role) + "</div>" +
+      '<div class="case-block"><h4>' + t.challenge + "</h4><p>" + esc(d.challenge) + "</p></div>" +
+      '<div class="case-block"><h4>' + t.solution + "</h4><p>" + esc(d.solution) + "</p></div>" +
+      '<div class="case-block"><h4>' + t.decisions + "</h4><ul>" + dec + "</ul></div>" +
+      '<div class="case-block"><h4>' + t.outcome + "</h4><ul>" + out + "</ul></div>" +
+      '<a class="case-cta" href="' + c.link.url + '" target="_blank" rel="noopener noreferrer">' + linkLabel + "</a>";
+  }
+
+  function open(id) {
+    currentId = id;
+    render(id);
+    modal.classList.add("open");
+    modal.removeAttribute("hidden");
+    document.body.style.overflow = "hidden";
+    var closeBtn = modal.querySelector(".case-close");
+    if (closeBtn) setTimeout(function () { closeBtn.focus(); }, 30);
+  }
+
+  function close() {
+    currentId = null;
+    modal.classList.remove("open");
+    modal.setAttribute("hidden", "");
+    document.body.style.overflow = "";
+  }
+
+  document.querySelectorAll(".proj-case").forEach(function (btn) {
+    btn.addEventListener("click", function () { open(btn.getAttribute("data-case")); });
+  });
+
+  modal.querySelectorAll("[data-case-close]").forEach(function (el) {
+    el.addEventListener("click", close);
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && modal.classList.contains("open")) close();
+  });
+
+  // Atualiza o idioma do modal se estiver aberto
+  window.addEventListener("langchange", function () {
+    if (currentId) render(currentId);
+  });
 })();
