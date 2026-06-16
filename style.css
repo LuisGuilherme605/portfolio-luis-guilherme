@@ -2275,3 +2275,40 @@ body.light .btn-glow {
   border-color: rgba(0, 229, 180, 0.5);
   background: rgba(0, 229, 180, 0.08);
 }
+
+/* ========================================
+   BOTAO DE IDIOMA (PT / EN)
+   ======================================== */
+.nav-lang {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  background: rgba(124, 92, 252, 0.08);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.55rem;
+  cursor: pointer;
+  font-family: "Space Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.nav-lang:hover {
+  border-color: rgba(124, 92, 252, 0.45);
+  background: rgba(124, 92, 252, 0.14);
+}
+
+.nav-lang .lang-sep {
+  color: var(--muted);
+  opacity: 0.5;
+  margin: 0 1px;
+}
+
+/* PT ativo por padrao */
+.nav-lang .lang-pt { color: var(--text); font-weight: 700; }
+.nav-lang .lang-en { color: var(--muted); font-weight: 400; }
+
+/* EN ativo */
+.nav-lang.en .lang-pt { color: var(--muted); font-weight: 400; }
+.nav-lang.en .lang-en { color: var(--text); font-weight: 700; }
