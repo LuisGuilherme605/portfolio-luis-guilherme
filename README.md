@@ -62,7 +62,7 @@ Abra `index.html` no navegador ou use a extensao **Live Server** no VS Code.
 
 ## Contato
 
-- [LinkedIn](https://www.linkedin.com/in/luis-guilherme-126072360)
+- [LinkedIn](https://www.linkedin.com/in/luis-guilherme-dev)
 - lg5104891@gmail.com
 - [Portfolio](https://luisguilherme605.github.io/portfolio-luis-guilherme)
 

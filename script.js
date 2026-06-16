@@ -620,7 +620,7 @@ var prefersReducedMotion = window.matchMedia(
     { icon: "✆", label: "Conversar no WhatsApp", hint: "Link", type: "link", value: "https://wa.me/5561998730501" },
     { icon: "@", label: "Enviar e-mail", hint: "Link", type: "link", value: "mailto:Lg5104891@gmail.com" },
     { icon: "⌥", label: "GitHub", hint: "Link", type: "link", value: "https://github.com/LuisGuilherme605" },
-    { icon: "in", label: "LinkedIn", hint: "Link", type: "link", value: "https://www.linkedin.com/in/luis-guilherme-126072360" },
+    { icon: "in", label: "LinkedIn", hint: "Link", type: "link", value: "https://www.linkedin.com/in/luis-guilherme-dev" },
   ];
 
   var filtered = commands.slice();

@@ -1,5 +1,5 @@
 /* Service Worker — Portfolio Luis Guilherme */
-var CACHE = "lgdev-v3";
+var CACHE = "lgdev-v4";
 var ASSETS = [
   "./",
   "index.html",
