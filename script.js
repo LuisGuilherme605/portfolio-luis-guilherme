@@ -392,7 +392,15 @@ var prefersReducedMotion = window.matchMedia(
   var el = document.getElementById("typed-text");
   if (!el) return;
 
-  var words = (el.getAttribute("data-words") || "").split("|").filter(Boolean);
+  function getWords() {
+    var attr =
+      document.documentElement.lang === "en" && el.getAttribute("data-words-en")
+        ? "data-words-en"
+        : "data-words";
+    return (el.getAttribute(attr) || "").split("|").filter(Boolean);
+  }
+
+  var words = getWords();
   if (words.length < 2 || prefersReducedMotion) return;
 
   var wordIndex = 0;
@@ -400,6 +408,8 @@ var prefersReducedMotion = window.matchMedia(
   var deleting = false;
 
   function tick() {
+    words = getWords(); // re-le para refletir troca de idioma
+    if (wordIndex >= words.length) wordIndex = 0;
     var current = words[wordIndex];
 
     if (!deleting) {
@@ -603,6 +613,7 @@ var prefersReducedMotion = window.matchMedia(
     { icon: "✎", label: "Formação", hint: "Seção", type: "nav", value: "#formacao" },
     { icon: "✉", label: "Contato", hint: "Seção", type: "nav", value: "#contato" },
     { icon: "⇩", label: "Baixar currículo (PDF)", hint: "Arquivo", type: "link", value: "curriculo-luis-guilherme.pdf" },
+    { icon: "文", label: "English / Português", hint: "Idioma", type: "action", value: "lang" },
     { icon: "☀", label: "Alternar tema claro/escuro", hint: "Ação", type: "action", value: "theme" },
     { icon: "▲", label: "Ir para o topo", hint: "Ação", type: "action", value: "top" },
     { icon: "✆", label: "Conversar no WhatsApp", hint: "Link", type: "link", value: "https://wa.me/5561998730501" },
@@ -695,6 +706,7 @@ var prefersReducedMotion = window.matchMedia(
       window.open(cmd.value, "_blank", "noopener");
     } else if (cmd.type === "action") {
       if (cmd.value === "theme" && window.__toggleTheme) window.__toggleTheme();
+      if (cmd.value === "lang" && window.__toggleLang) window.__toggleLang();
       if (cmd.value === "top")
         window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
     }
@@ -732,4 +744,76 @@ var prefersReducedMotion = window.matchMedia(
       if (filtered[activeIndex]) run(filtered[activeIndex]);
     }
   });
+})();
+
+/* Idioma PT / EN */
+(function () {
+  var toggle = document.getElementById("langToggle");
+  var STORE = "lang";
+
+  function translateEl(el, lang) {
+    var en = el.getAttribute("data-en");
+    if (en === null) return;
+    if (lang === "en") {
+      if (el.getAttribute("data-pt") === null)
+        el.setAttribute("data-pt", el.innerHTML);
+      el.innerHTML = en;
+    } else {
+      var pt = el.getAttribute("data-pt");
+      if (pt !== null) el.innerHTML = pt;
+    }
+  }
+
+  function translatePlaceholder(el, lang) {
+    var en = el.getAttribute("data-en-placeholder");
+    if (en === null) return;
+    if (lang === "en") {
+      if (!el.getAttribute("data-pt-placeholder"))
+        el.setAttribute("data-pt-placeholder", el.getAttribute("placeholder") || "");
+      el.setAttribute("placeholder", en);
+    } else {
+      var pt = el.getAttribute("data-pt-placeholder");
+      if (pt !== null) el.setAttribute("placeholder", pt);
+    }
+  }
+
+  function apply(lang) {
+    document.documentElement.lang = lang === "en" ? "en" : "pt-BR";
+    var i, els;
+    els = document.querySelectorAll("[data-en]");
+    for (i = 0; i < els.length; i++) translateEl(els[i], lang);
+    els = document.querySelectorAll("[data-en-placeholder]");
+    for (i = 0; i < els.length; i++) translatePlaceholder(els[i], lang);
+    document.title =
+      lang === "en"
+        ? "Luis Guilherme — Front-End Developer & Tech Student"
+        : "Luis Guilherme — Dev Frontend & ADS";
+    if (toggle) toggle.classList.toggle("en", lang === "en");
+    try {
+      window.dispatchEvent(new CustomEvent("langchange", { detail: lang }));
+    } catch (e) {}
+  }
+
+  var saved = null;
+  try {
+    saved = localStorage.getItem(STORE);
+  } catch (e) {}
+
+  var initial =
+    saved ||
+    (navigator.language && navigator.language.toLowerCase().indexOf("pt") === 0
+      ? "pt"
+      : "en");
+  apply(initial === "en" ? "en" : "pt");
+
+  function toggleLang() {
+    var next = document.documentElement.lang === "en" ? "pt" : "en";
+    apply(next);
+    try {
+      localStorage.setItem(STORE, next);
+    } catch (e) {}
+  }
+
+  if (toggle) toggle.addEventListener("click", toggleLang);
+  window.__toggleLang = toggleLang;
 })();
