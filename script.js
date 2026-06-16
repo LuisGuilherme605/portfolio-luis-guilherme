@@ -602,6 +602,7 @@ var prefersReducedMotion = window.matchMedia(
     { icon: "▣", label: "Projetos", hint: "Seção", type: "nav", value: "#projetos" },
     { icon: "✎", label: "Formação", hint: "Seção", type: "nav", value: "#formacao" },
     { icon: "✉", label: "Contato", hint: "Seção", type: "nav", value: "#contato" },
+    { icon: "⇩", label: "Baixar currículo (PDF)", hint: "Arquivo", type: "link", value: "curriculo-luis-guilherme.pdf" },
     { icon: "☀", label: "Alternar tema claro/escuro", hint: "Ação", type: "action", value: "theme" },
     { icon: "▲", label: "Ir para o topo", hint: "Ação", type: "action", value: "top" },
     { icon: "✆", label: "Conversar no WhatsApp", hint: "Link", type: "link", value: "https://wa.me/5561998730501" },
