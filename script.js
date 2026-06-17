@@ -607,24 +607,34 @@ var prefersReducedMotion = window.matchMedia(
   var trigger = document.getElementById("cmdkTrigger");
 
   var commands = [
-    { icon: "◆", label: "Sobre mim", hint: "Seção", type: "nav", value: "#sobre" },
-    { icon: "✦", label: "Habilidades", hint: "Seção", type: "nav", value: "#habilidades" },
-    { icon: "⬡", label: "Stack tecnológico", hint: "Seção", type: "nav", value: "#stack" },
-    { icon: "▣", label: "Projetos", hint: "Seção", type: "nav", value: "#projetos" },
-    { icon: "✎", label: "Formação", hint: "Seção", type: "nav", value: "#formacao" },
-    { icon: "✉", label: "Contato", hint: "Seção", type: "nav", value: "#contato" },
-    { icon: "⇩", label: "Baixar currículo (PDF)", hint: "Arquivo", type: "link", value: "curriculo-luis-guilherme.pdf" },
-    { icon: "文", label: "English / Português", hint: "Idioma", type: "action", value: "lang" },
-    { icon: "☀", label: "Alternar tema claro/escuro", hint: "Ação", type: "action", value: "theme" },
-    { icon: "▲", label: "Ir para o topo", hint: "Ação", type: "action", value: "top" },
-    { icon: "✆", label: "Conversar no WhatsApp", hint: "Link", type: "link", value: "https://wa.me/5561998730501" },
-    { icon: "@", label: "Enviar e-mail", hint: "Link", type: "link", value: "mailto:Lg5104891@gmail.com" },
-    { icon: "⌥", label: "GitHub", hint: "Link", type: "link", value: "https://github.com/LuisGuilherme605" },
-    { icon: "in", label: "LinkedIn", hint: "Link", type: "link", value: "https://www.linkedin.com/in/luis-guilherme-dev" },
+    { icon: "◆", label: "Sobre mim", en: "About me", hint: "Seção", hintEn: "Section", type: "nav", value: "#sobre" },
+    { icon: "✦", label: "Habilidades", en: "Skills", hint: "Seção", hintEn: "Section", type: "nav", value: "#habilidades" },
+    { icon: "⬡", label: "Stack tecnológico", en: "Tech stack", hint: "Seção", hintEn: "Section", type: "nav", value: "#stack" },
+    { icon: "▣", label: "Projetos", en: "Projects", hint: "Seção", hintEn: "Section", type: "nav", value: "#projetos" },
+    { icon: "✎", label: "Formação", en: "Education", hint: "Seção", hintEn: "Section", type: "nav", value: "#formacao" },
+    { icon: "✉", label: "Contato", en: "Contact", hint: "Seção", hintEn: "Section", type: "nav", value: "#contato" },
+    { icon: "⇩", label: "Baixar currículo (PDF)", en: "Download résumé (PDF)", hint: "Arquivo", hintEn: "File", type: "link", value: "curriculo-luis-guilherme.pdf" },
+    { icon: "文", label: "English / Português", en: "English / Português", hint: "Idioma", hintEn: "Language", type: "action", value: "lang" },
+    { icon: "☀", label: "Alternar tema claro/escuro", en: "Toggle light/dark theme", hint: "Ação", hintEn: "Action", type: "action", value: "theme" },
+    { icon: "▲", label: "Ir para o topo", en: "Back to top", hint: "Ação", hintEn: "Action", type: "action", value: "top" },
+    { icon: "✆", label: "Conversar no WhatsApp", en: "Chat on WhatsApp", hint: "Link", hintEn: "Link", type: "link", value: "https://wa.me/5561998730501" },
+    { icon: "@", label: "Enviar e-mail", en: "Send email", hint: "Link", hintEn: "Link", type: "link", value: "mailto:Lg5104891@gmail.com" },
+    { icon: "⌥", label: "GitHub", en: "GitHub", hint: "Link", hintEn: "Link", type: "link", value: "https://github.com/LuisGuilherme605" },
+    { icon: "in", label: "LinkedIn", en: "LinkedIn", hint: "Link", hintEn: "Link", type: "link", value: "https://www.linkedin.com/in/luis-guilherme-dev" },
   ];
 
   var filtered = commands.slice();
   var activeIndex = 0;
+
+  function isEn() {
+    return document.documentElement.lang === "en";
+  }
+  function lbl(c) {
+    return isEn() && c.en ? c.en : c.label;
+  }
+  function hnt(c) {
+    return isEn() && c.hintEn ? c.hintEn : c.hint;
+  }
 
   function norm(s) {
     return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -643,8 +653,8 @@ var prefersReducedMotion = window.matchMedia(
       li.setAttribute("role", "option");
       li.innerHTML =
         '<span class="cmdk-ico">' + cmd.icon + "</span>" +
-        "<span>" + cmd.label + "</span>" +
-        '<span class="cmdk-hint">' + cmd.hint + "</span>";
+        "<span>" + lbl(cmd) + "</span>" +
+        '<span class="cmdk-hint">' + hnt(cmd) + "</span>";
       li.addEventListener("click", function () {
         run(cmd);
       });
@@ -667,7 +677,7 @@ var prefersReducedMotion = window.matchMedia(
     var q = norm(input.value.trim());
     filtered = q
       ? commands.filter(function (c) {
-          return norm(c.label).indexOf(q) !== -1 || norm(c.hint).indexOf(q) !== -1;
+          return norm(lbl(c)).indexOf(q) !== -1 || norm(hnt(c)).indexOf(q) !== -1;
         })
       : commands.slice();
     activeIndex = 0;
