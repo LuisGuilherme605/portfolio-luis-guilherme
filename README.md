@@ -14,17 +14,20 @@ Site de portfolio pessoal desenvolvido com **HTML, CSS e JavaScript puro**, apre
 
 ## Funcionalidades
 
-- Apresentacao pessoal e trajetoria como desenvolvedor
-- Secao de projetos com links para os sites ao vivo
-- Secao de contato com links diretos (email, GitHub, LinkedIn, WhatsApp)
 - Layout 100% responsivo (mobile e desktop)
-- Cursor customizado com efeito de trail
-- Background animado com estrelas (canvas)
-- Animacoes de fade-in com Intersection Observer
-- Marquee de tecnologias
-- Orbita animada de tech stack
-- Menu hamburger para mobile
-- SEO otimizado com Open Graph tags
+- **Bilingue PT/EN** com deteccao do idioma do navegador e memoria da escolha
+- **Tema claro/escuro** com persistencia
+- **PWA** instalavel e com funcionamento offline (service worker)
+- **Command palette** (Ctrl/Cmd + K) para navegacao rapida
+- **Estudos de caso** dos projetos em modal (Desafio, Solucao, Decisoes, Resultado)
+- Download do **curriculo em PDF**
+- Microinteracoes: cursor customizado, robo 3D que segue o mouse, tilt 3D nos
+  cards, botoes magneticos, contador animado e efeito de digitacao
+- Background animado com estrelas (canvas), marquee e orbita de tech stack
+- Botao flutuante de WhatsApp e voltar ao topo
+- Acessibilidade: navegacao por teclado, skip link, foco visivel e suporte a
+  `prefers-reduced-motion`
+- SEO: Open Graph, `sitemap.xml`, `robots.txt` e `canonical`
 
 ---
 
@@ -40,11 +43,16 @@ Site de portfolio pessoal desenvolvido com **HTML, CSS e JavaScript puro**, apre
 
 ```
 portfolio-luis-guilherme/
-├── index.html     # Pagina principal (HTML semantico)
-├── style.css      # Estilos separados e organizados por secao
-├── script.js      # Logica JavaScript modularizada
-├── .gitignore     # Arquivos ignorados pelo Git
-└── README.md      # Documentacao do projeto
+├── index.html                    # Pagina principal (HTML semantico)
+├── style.css                     # Estilos organizados por secao
+├── script.js                     # Logica JavaScript modularizada
+├── service-worker.js             # Cache offline (PWA)
+├── manifest.json                 # Manifesto do PWA
+├── favicon.svg                   # Icone do site
+├── curriculo-luis-guilherme.pdf  # Curriculo para download
+├── robots.txt / sitemap.xml      # SEO
+├── .gitignore
+└── README.md
 ```
 
 ---
