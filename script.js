@@ -334,7 +334,22 @@ var prefersReducedMotion = window.matchMedia(
   );
 
   window.addEventListener("resize", measure);
-  window.addEventListener("scroll", measure, { passive: true });
+
+  // Scroll com throttle via rAF (evita getBoundingClientRect a cada evento)
+  var measuring = false;
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!measuring) {
+        window.requestAnimationFrame(function () {
+          measure();
+          measuring = false;
+        });
+        measuring = true;
+      }
+    },
+    { passive: true }
+  );
 
   measure();
 })();
@@ -684,7 +699,10 @@ var prefersReducedMotion = window.matchMedia(
     render();
   }
 
+  var lastFocused = null;
+
   function open() {
+    lastFocused = document.activeElement;
     filtered = commands.slice();
     activeIndex = 0;
     input.value = "";
@@ -701,6 +719,7 @@ var prefersReducedMotion = window.matchMedia(
     cmdk.classList.remove("open");
     cmdk.setAttribute("hidden", "");
     document.body.style.overflow = "";
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
   }
 
   function run(cmd) {
@@ -742,6 +761,10 @@ var prefersReducedMotion = window.matchMedia(
     if (e.key === "Escape") {
       e.preventDefault();
       close();
+    } else if (e.key === "Tab") {
+      // Mantem o foco dentro do palette (so o campo de busca e focavel)
+      e.preventDefault();
+      input.focus();
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
       activeIndex = Math.min(activeIndex + 1, filtered.length - 1);
@@ -939,7 +962,11 @@ var prefersReducedMotion = window.matchMedia(
       '<a class="case-cta" href="' + c.link.url + '" target="_blank" rel="noopener noreferrer">' + linkLabel + "</a>";
   }
 
+  var lastFocused = null;
+  var panel = modal.querySelector(".case-panel");
+
   function open(id) {
+    lastFocused = document.activeElement;
     currentId = id;
     render(id);
     modal.classList.add("open");
@@ -954,6 +981,7 @@ var prefersReducedMotion = window.matchMedia(
     modal.classList.remove("open");
     modal.setAttribute("hidden", "");
     document.body.style.overflow = "";
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
   }
 
   document.querySelectorAll(".proj-case").forEach(function (btn) {
@@ -965,7 +993,25 @@ var prefersReducedMotion = window.matchMedia(
   });
 
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && modal.classList.contains("open")) close();
+    if (!modal.classList.contains("open")) return;
+    if (e.key === "Escape") {
+      close();
+    } else if (e.key === "Tab" && panel) {
+      // Prende o foco dentro do modal
+      var f = panel.querySelectorAll(
+        'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!f.length) return;
+      var first = f[0];
+      var last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
   });
 
   // Atualiza o idioma do modal se estiver aberto
