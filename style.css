@@ -14,15 +14,12 @@
 :root {
   --bg: #07070f;
   --bg2: #0e0e1a;
-  --bg3: #16162a;
   --accent: #7c5cfc;
   --accent2: #00e5b4;
-  --accent3: #ff6b6b;
   --text: #f0eeff;
   --muted: #6b6b9a;
   --border: rgba(124, 92, 252, 0.18);
   --card: rgba(255, 255, 255, 0.028);
-  --glow: rgba(124, 92, 252, 0.35);
 }
 
 html {
@@ -1457,10 +1454,6 @@ footer {
   #cursor,
   #cursor-trail {
     display: none;
-  }
-
-  .scroll-hint {
-    right: 1.5rem;
   }
 
   .projects-grid {
