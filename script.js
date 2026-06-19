@@ -2,7 +2,7 @@
    PORTFOLIO — Luis Guilherme
    ======================================== */
 
-/* Stars Background */
+/* Stars Background — drifting + twinkling */
 (function () {
   const canvas = document.getElementById("star-canvas");
   const ctx = canvas.getContext("2d");
@@ -17,13 +17,15 @@
   resize();
   window.addEventListener("resize", resize);
 
-  for (let i = 0; i < 140; i++) {
+  for (let i = 0; i < 160; i++) {
     stars.push({
-      x: Math.random() * 2000,
-      y: Math.random() * 1200,
-      r: Math.random() * 1.2 + 0.2,
-      alpha: Math.random(),
-      speed: Math.random() * 0.003 + 0.001,
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 1.3 + 0.2,
+      alpha: Math.random() * Math.PI * 2,
+      speed: Math.random() * 0.004 + 0.0015,
+      dx: (Math.random() - 0.5) * 0.12,
+      dy: Math.random() * 0.12 + 0.02,
     });
   }
 
@@ -31,16 +33,44 @@
     ctx.clearRect(0, 0, width, height);
     stars.forEach(function (star) {
       star.alpha += star.speed;
+      star.x += star.dx;
+      star.y += star.dy;
+      if (star.x < 0) star.x = width;
+      else if (star.x > width) star.x = 0;
+      if (star.y > height) {
+        star.y = 0;
+        star.x = Math.random() * width;
+      }
+      const tw = (Math.sin(star.alpha) * 0.5 + 0.5) * 0.7 + 0.1;
       ctx.beginPath();
-      ctx.arc(star.x % width, star.y % height, star.r, 0, Math.PI * 2);
-      ctx.fillStyle =
-        "rgba(180,160,255," + (Math.sin(star.alpha) * 0.5 + 0.5) * 0.6 + ")";
+      ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(186,168,255," + tw + ")";
       ctx.fill();
     });
     requestAnimationFrame(draw);
   }
 
   draw();
+})();
+
+/* Hero parallax — fundo reage ao mouse (desktop) */
+(function () {
+  if (window.matchMedia("(max-width: 900px)").matches) return;
+  var hero = document.querySelector(".hero");
+  var grid = document.querySelector(".hero-grid-bg");
+  if (!hero || !grid) return;
+  var ticking = false;
+  hero.addEventListener("mousemove", function (e) {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      var r = hero.getBoundingClientRect();
+      var mx = (e.clientX - r.left) / r.width - 0.5;
+      var my = (e.clientY - r.top) / r.height - 0.5;
+      grid.style.transform = "translate(" + mx * 20 + "px," + my * 20 + "px)";
+    });
+  });
 })();
 
 /* Custom Cursor */
@@ -134,5 +164,131 @@
         }, 50);
       }
     });
+  });
+})();
+
+var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Robo mascote — olhos seguem o cursor, cabeca inclina em 3D */
+(function () {
+  var robo = document.getElementById("robo");
+  if (!robo || reduceMotion) return;
+  var inner = robo.querySelector(".robo-inner");
+  var pupils = robo.querySelectorAll(".robo-pupil");
+
+  // alvo (target) e valor atual (suavizado) de cada eixo
+  var tPupilX = 0, tPupilY = 0, pupilX = 0, pupilY = 0;
+  var tRotX = 0, tRotY = 0, rotX = 0, rotY = 0;
+
+  function onMove(clientX, clientY) {
+    var rect = robo.getBoundingClientRect();
+    if (!rect.width) return; // robo escondido (mobile)
+    var cx = rect.left + rect.width / 2;
+    var cy = rect.top + rect.height / 2;
+    var ang = Math.atan2(clientY - cy, clientX - cx);
+    var reach = Math.min(Math.hypot(clientX - cx, clientY - cy) / 55, 1);
+    tPupilX = Math.cos(ang) * 5 * reach; // unidades do viewBox do SVG
+    tPupilY = Math.sin(ang) * 4 * reach;
+    // cabeca "olha" na direcao do cursor (parallax 3D)
+    tRotY = (clientX / window.innerWidth - 0.5) * 26;
+    tRotX = -(clientY / window.innerHeight - 0.5) * 18;
+  }
+
+  window.addEventListener("mousemove", function (e) {
+    onMove(e.clientX, e.clientY);
+  });
+  window.addEventListener(
+    "touchmove",
+    function (e) {
+      if (e.touches[0]) onMove(e.touches[0].clientX, e.touches[0].clientY);
+    },
+    { passive: true }
+  );
+
+  function tick() {
+    pupilX += (tPupilX - pupilX) * 0.18;
+    pupilY += (tPupilY - pupilY) * 0.18;
+    rotX += (tRotX - rotX) * 0.08;
+    rotY += (tRotY - rotY) * 0.08;
+    var t = "translate(" + pupilX.toFixed(2) + " " + pupilY.toFixed(2) + ")";
+    pupils.forEach(function (p) {
+      p.setAttribute("transform", t);
+    });
+    inner.style.transform =
+      "perspective(620px) rotateX(" +
+      rotX.toFixed(2) +
+      "deg) rotateY(" +
+      rotY.toFixed(2) +
+      "deg)";
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+/* Tilt 3D nos cards — mesmo motivo do robo: reagem ao cursor */
+(function () {
+  if (reduceMotion || window.matchMedia("(max-width: 820px)").matches) return;
+  var cards = document.querySelectorAll(".proj-card, .skill-card");
+  cards.forEach(function (card) {
+    card.addEventListener("mousemove", function (e) {
+      var r = card.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width - 0.5;
+      var py = (e.clientY - r.top) / r.height - 0.5;
+      card.classList.add("tilt-on");
+      card.style.transform =
+        "perspective(720px) rotateX(" +
+        (-py * 5).toFixed(2) +
+        "deg) rotateY(" +
+        (px * 5).toFixed(2) +
+        "deg) translateY(-6px)";
+    });
+    card.addEventListener("mouseleave", function () {
+      card.classList.remove("tilt-on");
+      card.style.transform = "";
+    });
+  });
+})();
+
+/* Contador animado nos numeros das stats (ao entrar na tela) */
+(function () {
+  if (reduceMotion) return;
+  var targets = [];
+  document.querySelectorAll(".stat-n").forEach(function (el) {
+    var raw = el.textContent.trim();
+    if (/^\d+$/.test(raw)) {
+      el.dataset.end = raw; // guarda o alvo ANTES de zerar
+      el.textContent = "0";
+      targets.push(el);
+    }
+  });
+  if (!targets.length) return;
+
+  function run(el) {
+    var end = parseInt(el.dataset.end, 10);
+    var dur = 1100,
+      start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3); // ease-out cubico
+      el.textContent = Math.round(end * eased).toString();
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  var obs = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          run(entry.target);
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.6 }
+  );
+  targets.forEach(function (el) {
+    obs.observe(el);
   });
 })();

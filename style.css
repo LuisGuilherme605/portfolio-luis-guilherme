@@ -146,7 +146,7 @@ nav {
 .hero-orb-1 {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(124, 92, 252, 0.2), transparent 70%);
+  background: radial-gradient(circle, rgba(124, 92, 252, 0.28), transparent 70%);
   top: -100px;
   right: -100px;
 }
@@ -154,7 +154,7 @@ nav {
 .hero-orb-2 {
   width: 350px;
   height: 350px;
-  background: radial-gradient(circle, rgba(0, 229, 180, 0.12), transparent 70%);
+  background: radial-gradient(circle, rgba(0, 229, 180, 0.17), transparent 70%);
   bottom: 50px;
   left: -50px;
   animation-delay: -3s;
@@ -163,10 +163,13 @@ nav {
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0) scale(1);
+    transform: translate(0, 0) scale(1);
   }
-  50% {
-    transform: translateY(-30px) scale(1.05);
+  33% {
+    transform: translate(22px, -34px) scale(1.06);
+  }
+  66% {
+    transform: translate(-16px, -14px) scale(1.02);
   }
 }
 
@@ -217,10 +220,65 @@ h1.hero-name {
 
 .hero-name .name-last {
   display: block;
-  background: linear-gradient(130deg, var(--accent) 0%, var(--accent2) 60%, #a78bfa 100%);
+  background: linear-gradient(130deg, var(--accent) 0%, var(--accent2) 55%, #a78bfa 100%);
+  background-size: 220% 220%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: heroRise 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.46s backwards,
+    nameShimmer 8s ease-in-out 1.3s infinite;
+}
+
+/* ========================================
+   HERO ENTRANCE (page-load life)
+   ======================================== */
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nameShimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.hero-eyebrow,
+.hero-name .name-first,
+.hero-role,
+.hero-desc,
+.hero-ctas,
+.hero .scroll-hint {
+  animation: heroRise 0.85s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.hero-eyebrow {
+  animation-delay: 0.15s;
+}
+.hero-name .name-first {
+  animation-delay: 0.3s;
+}
+.hero-role {
+  animation-delay: 0.62s;
+}
+.hero-desc {
+  animation-delay: 0.74s;
+}
+.hero-ctas {
+  animation-delay: 0.86s;
+}
+.hero .scroll-hint {
+  animation-delay: 1.05s;
 }
 
 .hero-role {
@@ -843,6 +901,7 @@ hr.sep {
   padding: 5rem 6rem;
   position: relative;
   z-index: 1;
+  overflow: hidden;
 }
 
 .stack-content {
@@ -853,12 +912,23 @@ hr.sep {
 
 .stack-text {
   flex: 1;
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
 }
 
+/* Órbita decorativa: encostada na lateral direita, atrás do conteúdo,
+   sem capturar cliques — fica de enfeite, não na frente das coisas. */
 .stack-visual {
-  flex: 0 0 340px;
+  position: absolute;
+  right: -50px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 340px;
   height: 340px;
-  position: relative;
+  opacity: 0.7;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .orbit-center {
@@ -1335,5 +1405,172 @@ footer {
 
   .projects-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
+   ROBO MASCOTE — companheiro que segue o cursor
+   ======================================== */
+.robo {
+  position: fixed;
+  right: 26px;
+  bottom: 20px;
+  z-index: 90;
+  pointer-events: none; /* nunca bloqueia clique/leitura do site */
+  filter: drop-shadow(0 16px 26px rgba(124, 92, 252, 0.28));
+  animation: roboIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.2s backwards;
+}
+
+.robo-float {
+  animation: roboFloat 5.5s ease-in-out infinite;
+  position: relative;
+}
+
+.robo-inner {
+  /* perspectiva auto-contida: o JS escreve perspective(620px) rotateX/Y aqui */
+  transform: perspective(620px) rotateX(0deg) rotateY(0deg);
+  will-change: transform;
+}
+
+.robo svg {
+  display: block;
+}
+
+/* olhos: piscar e seguir o cursor */
+.robo-eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: roboBlink 5.2s ease-in-out infinite;
+}
+
+.robo-pupil {
+  transition: transform 0.08s linear;
+}
+
+/* antena e nucleo pulsando */
+.robo-antenna,
+.robo-core {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.robo-antenna {
+  animation: roboPulse 1.9s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px #00e5b4);
+}
+.robo-core {
+  animation: roboPulse 2.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px #7c5cfc);
+}
+
+/* balao de saudacao (some sozinho) */
+.robo-bubble {
+  position: absolute;
+  top: 6px;
+  left: -52px;
+  background: rgba(20, 20, 42, 0.95);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: "Space Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.55rem;
+  border-radius: 10px 10px 2px 10px;
+  white-space: nowrap;
+  opacity: 0;
+  animation: roboBubble 6s ease 2.2s 1 forwards;
+}
+
+@keyframes roboIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes roboFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes roboBlink {
+  0%,
+  90%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.08);
+  }
+}
+
+@keyframes roboPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 1;
+  }
+}
+
+@keyframes roboBubble {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  12%,
+  70% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* ========================================
+   TILT 3D — cards reagem ao cursor (mesmo motivo do robo)
+   ======================================== */
+.proj-card,
+.skill-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.tilt-on {
+  transition: transform 0.12s ease-out;
+}
+
+/* esconde o robo onde nao ha cursor / espaco apertado */
+@media (max-width: 820px) {
+  .robo {
+    display: none;
+  }
+}
+
+/* respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  .robo,
+  .robo-float,
+  .robo-eye,
+  .robo-antenna,
+  .robo-core,
+  .robo-bubble {
+    animation: none !important;
+  }
+  .robo-bubble {
+    display: none;
   }
 }
