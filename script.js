@@ -169,61 +169,7 @@
 
 var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* Robo mascote — olhos seguem o cursor, cabeca inclina em 3D */
-(function () {
-  var robo = document.getElementById("robo");
-  if (!robo || reduceMotion) return;
-  var inner = robo.querySelector(".robo-inner");
-  var pupils = robo.querySelectorAll(".robo-pupil");
-
-  // alvo (target) e valor atual (suavizado) de cada eixo
-  var tPupilX = 0, tPupilY = 0, pupilX = 0, pupilY = 0;
-  var tRotX = 0, tRotY = 0, rotX = 0, rotY = 0;
-
-  function onMove(clientX, clientY) {
-    var rect = robo.getBoundingClientRect();
-    if (!rect.width) return; // robo escondido (mobile)
-    var cx = rect.left + rect.width / 2;
-    var cy = rect.top + rect.height / 2;
-    var ang = Math.atan2(clientY - cy, clientX - cx);
-    var reach = Math.min(Math.hypot(clientX - cx, clientY - cy) / 55, 1);
-    tPupilX = Math.cos(ang) * 5 * reach; // unidades do viewBox do SVG
-    tPupilY = Math.sin(ang) * 4 * reach;
-    // cabeca "olha" na direcao do cursor (parallax 3D)
-    tRotY = (clientX / window.innerWidth - 0.5) * 26;
-    tRotX = -(clientY / window.innerHeight - 0.5) * 18;
-  }
-
-  window.addEventListener("mousemove", function (e) {
-    onMove(e.clientX, e.clientY);
-  });
-  window.addEventListener(
-    "touchmove",
-    function (e) {
-      if (e.touches[0]) onMove(e.touches[0].clientX, e.touches[0].clientY);
-    },
-    { passive: true }
-  );
-
-  function tick() {
-    pupilX += (tPupilX - pupilX) * 0.18;
-    pupilY += (tPupilY - pupilY) * 0.18;
-    rotX += (tRotX - rotX) * 0.08;
-    rotY += (tRotY - rotY) * 0.08;
-    var t = "translate(" + pupilX.toFixed(2) + " " + pupilY.toFixed(2) + ")";
-    pupils.forEach(function (p) {
-      p.setAttribute("transform", t);
-    });
-    inner.style.transform =
-      "perspective(620px) rotateX(" +
-      rotX.toFixed(2) +
-      "deg) rotateY(" +
-      rotY.toFixed(2) +
-      "deg)";
-    requestAnimationFrame(tick);
-  }
-  tick();
-})();
+/* Robo mascote 3D (WebGL) fica em robot3d.js, carregado como modulo */
 
 /* Tilt 3D nos cards — mesmo motivo do robo: reagem ao cursor */
 (function () {
