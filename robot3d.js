@@ -17,8 +17,8 @@ import * as THREE from "three";
     return;
   }
 
-  var W = 168,
-    H = 196;
+  var W = 120,
+    H = 140;
 
   // cores do site
   var PURPLE = 0x7c5cfc;
