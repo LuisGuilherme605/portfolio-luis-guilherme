@@ -161,11 +161,10 @@ import * as THREE from "three";
 
   // ---- loop ----
   var clock = new THREE.Clock();
-  var running = true;
+  var rafId = null;
 
   function frame() {
-    if (!running) return;
-    requestAnimationFrame(frame);
+    rafId = requestAnimationFrame(frame);
     var t = clock.getElapsedTime();
 
     // segue o cursor de forma suave
@@ -190,12 +189,14 @@ import * as THREE from "three";
   }
   frame();
 
-  // pausa quando a aba nao esta visivel (economiza recurso)
+  // pausa quando a aba nao esta visivel (economiza recurso, sem loop duplicado)
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) {
-      running = false;
-    } else if (!running) {
-      running = true;
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    } else if (rafId === null) {
       clock.start();
       frame();
     }
