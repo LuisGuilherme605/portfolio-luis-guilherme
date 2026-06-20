@@ -1,21 +1,9 @@
 /* ========================================
-   EXTRAS — idioma PT/EN, tema, CV, voltar ao topo e estudos de caso
+   EXTRAS — idioma PT/EN, tema, voltar ao topo e estudos de caso
    Tudo additivo: injeta os controles por JS e nao altera o resto do site.
    ======================================== */
 (function () {
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* ---------- injeta botao de CV no hero ---------- */
-  var ctas = document.querySelector(".hero-ctas");
-  if (ctas && !document.querySelector(".btn-cv")) {
-    var cv = document.createElement("a");
-    cv.href = "curriculo-luis-guilherme.pdf";
-    cv.setAttribute("download", "");
-    cv.className = "btn-ghost btn-cv";
-    cv.setAttribute("data-en", "Download CV ↓");
-    cv.innerHTML = "Baixar CV ↓";
-    ctas.appendChild(cv);
-  }
 
   /* ---------- injeta botao de tema (desktop + mobile) ---------- */
   var nav = document.querySelector("nav");

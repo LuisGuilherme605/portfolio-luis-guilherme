@@ -231,12 +231,6 @@ body.light .btn-glow {
   transform: translateY(-4px);
 }
 
-/* botao de CV no hero (herda .btn-ghost; so um acento) */
-.btn-cv {
-  border-color: rgba(0, 229, 180, 0.4) !important;
-  color: var(--accent2) !important;
-}
-
 /* ========================================
    ESTUDOS DE CASO — botao + modal
    ======================================== */
