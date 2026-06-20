@@ -29,6 +29,8 @@
     });
   }
 
+  let rafId = null;
+
   function draw() {
     ctx.clearRect(0, 0, width, height);
     stars.forEach(function (star) {
@@ -47,10 +49,22 @@
       ctx.fillStyle = "rgba(186,168,255," + tw + ")";
       ctx.fill();
     });
-    requestAnimationFrame(draw);
+    rafId = requestAnimationFrame(draw);
   }
 
   draw();
+
+  // Pausa as estrelas quando a aba nao esta visivel — economiza CPU e bateria.
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    } else if (rafId === null) {
+      draw();
+    }
+  });
 })();
 
 /* Hero parallax — fundo reage ao mouse (desktop) */
@@ -126,10 +140,9 @@
 
   hamburger.addEventListener("click", function () {
     hamburger.classList.toggle("open");
-    mobileMenu.classList.toggle("open");
-    document.body.style.overflow = mobileMenu.classList.contains("open")
-      ? "hidden"
-      : "";
+    var isOpen = mobileMenu.classList.toggle("open");
+    hamburger.setAttribute("aria-expanded", String(isOpen));
+    document.body.style.overflow = isOpen ? "hidden" : "";
   });
 
   document.querySelectorAll(".mobile-link").forEach(function (link) {
@@ -138,6 +151,7 @@
       var target = document.querySelector(link.getAttribute("href"));
       hamburger.classList.remove("open");
       mobileMenu.classList.remove("open");
+      hamburger.setAttribute("aria-expanded", "false");
       document.body.style.overflow = "";
       if (target) {
         target.classList.add("vis");
